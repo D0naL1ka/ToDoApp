@@ -17,7 +17,7 @@ namespace TodoApp.Infrastructure.Configuration
             builder.HasMany(x => x.Tasks)
                 .WithOne(x => x.TaskList)
                 .HasForeignKey(x => x.TaskListId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

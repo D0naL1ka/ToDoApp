@@ -6,9 +6,9 @@ using TodoApp.Domain.Entities;
 
 namespace TodoApp.Application.Mappings
 {
-    public class AutoMapper : Profile
+    public class AutoMapperProfile : Profile
     {
-        public AutoMapper()
+        public AutoMapperProfile()
         {
             // Task
             CreateMap<TaskItem, TaskDto>()
