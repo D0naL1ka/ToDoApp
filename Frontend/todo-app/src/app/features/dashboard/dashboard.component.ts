@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { SidebarComponent } from '../../shared/components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="d-flex align-items-center justify-content-center min-vh-100">
-      <h2>Dashboard</h2>
-    </div>
-  `
+  imports: [CommonModule, RouterOutlet, NavbarComponent, SidebarComponent],
+  templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {}

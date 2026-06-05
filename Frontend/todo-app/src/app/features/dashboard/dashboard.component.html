@@ -1,0 +1,18 @@
+<div class="d-flex flex-column min-vh-100">
+
+  <!-- Navbar -->
+  <app-navbar />
+
+  <!-- Content -->
+  <div class="d-flex flex-grow-1 overflow-hidden">
+
+    <!-- Sidebar -->
+    <app-sidebar />
+
+    <!-- Main content -->
+    <main class="flex-grow-1 overflow-auto bg-light p-4">
+      <router-outlet />
+    </main>
+
+  </div>
+</div>
