@@ -1,25 +1,34 @@
+using TodoApp.API.Extensions;
+using TodoApp.API.Middleware;
+using TodoApp.Domain.Interfaces;
+using TodoApp.Infrastructure.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddRepositories();
+builder.Services.AddServices();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.RegisterAutoMapper(); 
+builder.Services.AddValidation();
+builder.Services.AddCorsPolicy();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseCors("AllowAngular");
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
