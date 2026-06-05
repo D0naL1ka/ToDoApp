@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://...' // Цю адресу ти зміниш пізніше, коли купиш домен
+  apiUrl: 'https://localhost:7087/api' 
 };
