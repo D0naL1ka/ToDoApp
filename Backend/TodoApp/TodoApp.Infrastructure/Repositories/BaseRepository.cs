@@ -15,8 +15,10 @@ namespace TodoApp.Infrastructure.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public async Task<T?> GetByIdAsync(int id)
-            => await _dbSet.FindAsync(id);
+        public virtual async Task<T?> GetByIdAsync(int id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
 
         public async Task<IEnumerable<T>> GetAllAsync()
             => await _dbSet.ToListAsync();
@@ -28,14 +30,14 @@ namespace TodoApp.Infrastructure.Repositories
             return entity;
         }
 
-        public async Task<T> UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task DeleteAsync(int id)
+        public virtual async Task DeleteAsync(int id)
         {
             var entity = await GetByIdAsync(id);
             if (entity != null)

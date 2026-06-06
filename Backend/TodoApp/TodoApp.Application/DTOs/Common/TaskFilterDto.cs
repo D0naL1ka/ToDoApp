@@ -7,5 +7,8 @@
         public string? Search { get; set; }
         public int? CategoryId { get; set; }
         public bool Grouped { get; set; } = false;
+
+        public bool? IsCompleted { get; set; }
+        public bool? IsUnassigned { get; set; }
     }
 }

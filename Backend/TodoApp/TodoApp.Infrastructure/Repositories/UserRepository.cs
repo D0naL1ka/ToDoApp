@@ -16,5 +16,21 @@ namespace TodoApp.Infrastructure.Repositories
         public async Task<bool> ExistsAsync(string email)
             => await _context.Users
                 .AnyAsync(x => x.Email == email);
+
+        public async Task AddRefreshTokenAsync(RefreshToken token)
+        {
+            await _context.RefreshTokens.AddAsync(token);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RevokeRefreshTokenAsync(string token)
+        {
+            var refreshToken = await _context.RefreshTokens
+                .FirstOrDefaultAsync(t => t.Token == token && !t.IsRevoked);
+            if (refreshToken == null) return;
+
+            refreshToken.IsRevoked = true;
+            await _context.SaveChangesAsync();
+        }
     }
 }

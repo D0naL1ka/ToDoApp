@@ -1,0 +1,106 @@
+<div class="d-flex flex-column h-100 bg-white border-end sidebar-container" [class.collapsed]="isCollapsed">
+
+  <div class="p-2 ms-2 mt-1 mb-1 d-none d-md-block">
+    <button class="btn btn-sm btn-link text-decoration-none text-dark p-1 d-flex align-items-center"
+      (click)="toggleSidebar()">
+      <span class="material-symbols-outlined" style="font-size: 24px;">menu</span>
+    </button>
+  </div>
+
+  <div class="px-2">
+    <a routerLink="/myday" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
+      class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
+      <span class="material-symbols-outlined me-3 fs-4">light_mode</span>
+      <span class="hide-on-collapse">Мій день</span>
+      <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.myDay > 0">{{ counts.myDay }}</span>
+    </a>
+    <a routerLink="/important" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
+      class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
+      <span class="material-symbols-outlined me-3 fs-4">star</span>
+      <span class="hide-on-collapse">Важливо</span>
+      <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.important > 0">{{ counts.important }}</span>
+    </a>
+    <a routerLink="/planned" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
+      class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
+      <span class="material-symbols-outlined me-3 fs-4">event</span>
+      <span class="hide-on-collapse">Заплановано</span>
+      <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.planned > 0">{{ counts.planned }}</span>
+    </a>
+    <a routerLink="/tasks" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
+      class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
+      <span class="material-symbols-outlined me-3 4">home</span>
+      <span class="hide-on-collapse">Всі задачі</span>
+      <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.all > 0">{{ counts.all }}</span>
+    </a>
+    <a routerLink="/completed" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
+      class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
+      <span class="material-symbols-outlined me-3 fs-4">task_alt</span>
+      <span class="hide-on-collapse">Завершені</span>
+      <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.completed > 0">{{ counts.completed }}</span>
+    </a>
+  </div>
+
+  <hr class="my-2 mx-3 border-secondary opacity-25">
+
+  <!-- User lists -->
+  <div class="px-2 flex-grow-1 overflow-auto">
+    <div *ngFor="let list of taskLists" class="d-flex align-items-center px-3 rounded sidebar-item group">
+
+      <!-- Edit mode -->
+      <ng-container *ngIf="editingListId === list.id; else viewMode">
+        <span class="material-symbols-outlined me-3 text-muted">format_list_bulleted</span>
+        <input class="form-control form-control-sm flex-grow-1 hide-on-collapse" [(ngModel)]="editingListName"
+          (keyup.enter)="saveEdit(list)" (keyup.escape)="editingListId = null" autofocus>
+        <div class="d-flex hide-on-collapse ms-1">
+          <button class="btn btn-sm text-primary p-0 ms-1" (click)="saveEdit(list)"><span
+              class="material-symbols-outlined" style="font-size: 18px;">check</span></button>
+          <button class="btn btn-sm text-muted p-0 ms-1" (click)="editingListId = null"><span
+              class="material-symbols-outlined" style="font-size: 18px;">close</span></button>
+        </div>
+      </ng-container>
+
+      <!-- View mode -->
+      <ng-template #viewMode>
+        <a [routerLink]="['/list', list.id]" routerLinkActive="active text-primary fw-medium"
+          class="d-flex align-items-center text-decoration-none text-dark flex-grow-1 overflow-hidden h-100">
+          <span class="material-symbols-outlined me-3">format_list_bulleted</span>
+          <span class="text-truncate hide-on-collapse">{{ list.name }}</span>
+          <span class="badge bg-secondary ms-auto hide-on-collapse">{{ list.taskCount }}</span>
+        </a>
+
+        <div class="d-flex align-items-center hide-on-collapse ms-2">
+          <button class="btn btn-sm btn-link text-decoration-none text-muted p-0" (click)="startEdit(list)"
+            title="Редагувати">
+            <span class="material-symbols-outlined" style="font-size: 18px;">edit</span>
+          </button>
+          <button class="btn btn-sm btn-link text-decoration-none text-danger p-0 ms-1" title="Видалити"
+            (click)="openDeleteListDialog(list, $event)">
+            <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
+          </button>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Add new list -->
+    <div *ngIf="isAddingList" class="px-3 py-2 hide-on-collapse">
+      <input class="form-control form-control-sm mb-2" [(ngModel)]="newListName" placeholder="Назва списку..."
+        (keyup.enter)="addList()" (keyup.escape)="isAddingList = false" autofocus>
+      <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-primary flex-grow-1" (click)="addList()">Додати</button>
+        <button class="btn btn-sm btn-outline-secondary" (click)="isAddingList = false">Скасувати</button>
+      </div>
+    </div>
+
+    <div *ngIf="!isAddingList" class="d-flex align-items-center px-3 rounded sidebar-item create-list-btn mt-1"
+      (click)="isAddingList = true">
+      <span class="material-symbols-outlined me-3">add</span>
+      <span class="hide-on-collapse flex-grow-1">Створити список</span>
+      <span class="material-symbols-outlined hide-on-collapse ms-auto fs-4">create_new_folder</span>
+    </div>
+  </div>
+  <app-confirm-dialog [isVisible]="showDeleteListDialog" title="Видалити список"
+    [message]="'Видалити список «' + (listToDelete?.name || '') + '»? Всі задачі також будуть видалені.'"
+    confirmText="Видалити" (confirmed)="onDeleteListConfirmed()"
+    (cancelled)="showDeleteListDialog = false; listToDelete = null">
+  </app-confirm-dialog>
+</div>

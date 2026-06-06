@@ -1,0 +1,52 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light p-3">  <div class="card shadow w-100" style="max-width: 350px;">
+    <div class="card-body p-4">
+
+      <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">ToDo App</h2>
+        <p class="text-muted">Увійдіть у свій акаунт</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" formControlName="email" placeholder="email@gmail.com"
+            [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched">
+          <div class="invalid-feedback">Введіть коректний email</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Пароль</label>
+          <div class="input-group has-validation password-group">
+            <input [type]="showPassword ? 'text' : 'password'" class="form-control border-end-0 shadow-none"
+              formControlName="password" placeholder="********" style="background-image: none;"
+              [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched">
+
+            <span class="input-group-text bg-white border-start-0" (click)="togglePasswordVisibility()"
+              style="cursor: pointer;"
+              [class.border-danger]="form.get('password')?.invalid && form.get('password')?.touched">
+              <span class="material-symbols-outlined text-muted" style="font-size: 20px; user-select: none;">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </span>
+            <div class="invalid-feedback">Мінімум 6 символів</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ isLoading ? 'Вхід...' : 'Увійти' }}
+        </button>
+
+        <p class="text-center text-muted mb-0">
+          Немає акаунту?
+          <a routerLink="/register" class="text-primary text-decoration-none">Зареєструватись</a>
+        </p>
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<nav class="navbar navbar-dark bg-primary px-3" style="height: 48px;">
+  <div class="d-flex align-items-center gap-2">
+    <button class="btn btn-link text-decoration-none text-white p-0 d-flex d-md-none align-items-center"
+      (click)="menuToggle.emit()">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+    <span class="text-white fw-bold">ToDo App</span>
+  </div>
+
+  <div class="d-flex align-items-center gap-2">
+    <span class="text-white small d-none d-md-inline">
+      {{ authService.currentUser?.firstName }}
+      {{ authService.currentUser?.lastName }}
+    </span>
+
+    <button class="btn btn-sm btn-outline-light d-flex align-items-center gap-1" (click)="logout()">
+      <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+      <span class="d-none d-md-inline">Вийти</span>
+    </button>
+  </div>
+</nav>

@@ -1,0 +1,69 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light p-3">  <div class="card shadow w-100" style="max-width: 350px;">
+    <div class="card-body p-4">
+
+      <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">ToDo App</h2>
+        <p class="text-muted">Створіть акаунт</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="row mb-3">
+          <div class="col">
+            <label class="form-label">Ім'я</label>
+            <input type="text" class="form-control" formControlName="firstName" placeholder="Аліна"
+              [class.is-invalid]="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+            <div class="invalid-feedback">Введіть ім'я</div>
+          </div>
+          <div class="col">
+            <label class="form-label">Прізвище</label>
+            <input type="text" class="form-control" formControlName="lastName" placeholder="Сучок"
+              [class.is-invalid]="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+            <div class="invalid-feedback">Введіть прізвище</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" formControlName="email" placeholder="email@gmail.com"
+            [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched">
+          <div class="invalid-feedback">Введіть коректний email</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Пароль</label>
+          <div class="input-group has-validation password-group">
+
+            <input [type]="showPassword ? 'text' : 'password'" class="form-control border-end-0 shadow-none"
+              formControlName="password" placeholder="********" style="background-image: none;"
+              [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched">
+
+            <span class="input-group-text bg-white border-start-0" (click)="togglePasswordVisibility()"
+              style="cursor: pointer;"
+              [class.border-danger]="form.get('password')?.invalid && form.get('password')?.touched">
+              <span class="material-symbols-outlined text-muted" style="font-size: 20px; user-select: none;">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </span>
+
+            <div class="invalid-feedback">Мінімум 6 символів</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ isLoading ? 'Реєстрація...' : 'Зареєструватись' }}
+        </button>
+
+        <p class="text-center text-muted mb-0">
+          Вже є акаунт?
+          <a routerLink="/login" class="text-primary text-decoration-none">Увійти</a>
+        </p>
+      </form>
+
+    </div>
+  </div>
+</div>

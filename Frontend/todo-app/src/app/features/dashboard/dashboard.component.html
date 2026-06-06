@@ -1,0 +1,23 @@
+<div class="d-flex flex-column min-vh-100">
+
+  <!-- Navbar -->
+  <app-navbar (menuToggle)="toggleSidebar()" />
+
+  <!-- Content -->
+  <div class="d-flex flex-grow-1 overflow-hidden position-relative">
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" [class.show]="isSidebarOpen" (click)="closeSidebar()">
+    </div>
+
+    <!-- Sidebar -->
+    <app-sidebar class="sidebar-mobile" [class.open]="isSidebarOpen" (listSelected)="closeSidebar()">
+    </app-sidebar>
+
+    <!-- Main content -->
+    <main class="flex-grow-1 overflow-auto bg-light p-2 p-md-4">
+      <router-outlet />
+    </main>
+
+  </div>
+</div>
