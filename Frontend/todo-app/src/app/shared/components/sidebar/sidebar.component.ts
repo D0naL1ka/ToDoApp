@@ -11,7 +11,6 @@ import { TaskService } from '../../../core/services/task.service';
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive, FormsModule],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent implements OnInit {
   isCollapsed = false;

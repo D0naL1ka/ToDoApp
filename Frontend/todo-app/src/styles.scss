@@ -1,1 +1,94 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'bootstrap/scss/bootstrap';
+
+.task-checkbox {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid #adb5bd;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.15s ease;
+    position: relative;
+
+    &:hover {
+        border-color: #0d6efd;
+    }
+
+    &:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+
+        &::after {
+            content: 'check';
+            font-family: 'Material Symbols Outlined';
+            color: white;
+            font-size: 14px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+.task-row {
+    &:hover {
+        background-color: #f8f9fa;
+    }
+
+    &.selected-task {
+        background-color: #eff6ff;
+    }
+
+    &:last-child {
+        border-bottom: none !important;
+    }
+}
+
+.sidebar-container {
+    width: 260px;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+
+    &.collapsed {
+        width: 64px;
+
+        .hide-on-collapse {
+            display: none !important;
+        }
+    }
+}
+
+.sidebar-item {
+    height: 44px;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover:not(.active) {
+        background-color: #f3f4f6;
+    }
+
+    &.active .material-symbols-outlined {
+        font-variation-settings: 'FILL' 1;
+    }
+}
+
+.sidebar-item.create-list-btn {
+    color: #0d6efd;
+
+    .material-symbols-outlined {
+        color: #0d6efd;
+    }
+}
+
+.icon-filled {
+    font-variation-settings: 'FILL' 1;
+}
+
+.icon-outlined {
+    font-variation-settings: 'FILL' 0;
+}

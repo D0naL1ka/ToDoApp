@@ -25,5 +25,24 @@ namespace TodoApp.Infrastructure.Repositories
             => await _context.Categories
                 .Where(c => !c.IsSystem && c.UserId == userId)
                 .ToListAsync();
+
+        public override async Task DeleteAsync(int id)
+        {
+            var linkedTaskCategories = await _context.Set<TaskCategory>()
+                .Where(tc => tc.CategoryId == id)
+                .ToListAsync();
+
+            if (linkedTaskCategories.Any())
+            {
+                _context.Set<TaskCategory>().RemoveRange(linkedTaskCategories);
+            }
+
+            var category = await GetByIdAsync(id);
+            if (category != null)
+            {
+                _dbSet.Remove(category);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

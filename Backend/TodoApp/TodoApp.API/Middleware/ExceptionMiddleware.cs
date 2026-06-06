@@ -30,9 +30,15 @@ namespace TodoApp.API.Middleware
         private static async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = ex.Message.Contains("not found")
-                ? (int)HttpStatusCode.NotFound
-                : (int)HttpStatusCode.InternalServerError;
+
+            context.Response.StatusCode = ex.Message switch
+            {
+                var m when m.Contains("not found") => (int)HttpStatusCode.NotFound,
+                var m when m.Contains("already exists") => (int)HttpStatusCode.BadRequest,
+                var m when m.Contains("unauthorized") => (int)HttpStatusCode.Unauthorized,
+                var m when m.Contains("forbidden") => (int)HttpStatusCode.Forbidden,
+                _ => (int)HttpStatusCode.InternalServerError
+            };
 
             var response = new
             {

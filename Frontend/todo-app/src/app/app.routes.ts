@@ -51,6 +51,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/tasks/task-list.component')
             .then(m => m.TaskListComponent)
+      },
+      {
+        path: 'completed',
+        loadComponent: () =>
+          import('./features/dashboard/tasks/task-list.component')
+            .then(m => m.TaskListComponent)
       }
     ]
   },

@@ -58,19 +58,30 @@ namespace TodoApp.Application.Services
                 throw new Exception("Invalid email or password");
 
             var accessToken = _jwtService.GenerateAccessToken(user);
-            var refreshToken = _jwtService.GenerateRefreshToken();
+            var refreshTokenValue = _jwtService.GenerateRefreshToken();
+
+            var refreshToken = new RefreshToken
+            {
+                Token = refreshTokenValue,
+                UserId = user.Id,
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
+                IsRevoked = false
+            };
+            await _userRepository.AddRefreshTokenAsync(refreshToken);
 
             return new AuthResponseDto
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken,
+                RefreshToken = refreshTokenValue,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName
             };
         }
 
-        public Task LogoutAsync(string refreshToken)
-            => Task.CompletedTask;
+        public async Task LogoutAsync(string refreshToken)
+        {
+            await _userRepository.RevokeRefreshTokenAsync(refreshToken);
+        }
     }
 }

@@ -6,5 +6,7 @@ namespace TodoApp.Domain.Interfaces.Repositories
     {
         Task<User?> GetByEmailAsync(string email);
         Task<bool> ExistsAsync(string email);
+        Task AddRefreshTokenAsync(RefreshToken token);
+        Task RevokeRefreshTokenAsync(string token);
     }
 }

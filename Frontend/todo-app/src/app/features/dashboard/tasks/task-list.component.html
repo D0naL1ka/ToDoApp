@@ -1,0 +1,136 @@
+<div class="d-flex h-100 w-100">
+
+  <div class="flex-grow-1 d-flex flex-column">
+
+    <!-- Header -->
+    <div class="d-flex align-items-center mb-3">
+      <span class="material-symbols-outlined text-primary me-2 fs-4" *ngIf="currentRoute === 'myday'">light_mode</span>
+      <span class="material-symbols-outlined text-warning me-2 fs-4" *ngIf="currentRoute === 'important'">star</span>
+      <span class="material-symbols-outlined text-success me-2 fs-4" *ngIf="currentRoute === 'planned'">event</span>
+      <span class="material-symbols-outlined text-primary me-2 fs-4" *ngIf="currentRoute === 'tasks'">home</span>
+      <span class="material-symbols-outlined text-primary me-2 fs-4"
+        *ngIf="currentRoute === 'list'">format_list_bulleted</span>
+      <h4 class="fw-bold mb-0">{{ pageTitle }}</h4>
+    </div>
+
+    <div class="d-flex gap-2 mb-3">
+
+      <div class="input-group">
+        <span class="input-group-text bg-white border-end-0">
+          <span class="material-symbols-outlined text-muted" style="font-size:20px;">search</span>
+        </span>
+        <input class="form-control border-start-0 shadow-none" placeholder="Пошук задач..." [(ngModel)]="filter.search"
+          (input)="onSearch()">
+      </div>
+
+      <div class="dropdown">
+        <button class="form-control d-flex justify-content-between align-items-center shadow-none text-muted"
+          style="width: 220px; cursor: pointer; text-align: left;" type="button" data-bs-toggle="dropdown">
+          <span class="text-truncate">{{ currentSortLabel }}</span>
+          <span class="material-symbols-outlined text-muted" style="font-size:18px;">expand_more</span>
+        </button>
+        <ul class="dropdown-menu shadow-sm border-0 rounded-2" style="width: 220px;">
+          <li *ngFor="let opt of sortOptions" class="dropdown-item d-flex align-items-center justify-content-between"
+            style="cursor:pointer;" (click)="selectSort(opt.value)">
+            {{ opt.label }}
+            <span *ngIf="currentSort === opt.value" class="material-symbols-outlined text-primary"
+              style="font-size:16px;">check</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
+        <button class="form-control d-flex justify-content-between align-items-center shadow-none text-muted"
+          style="width: 200px; cursor: pointer; text-align: left;" type="button" data-bs-toggle="dropdown">
+          <span class="text-truncate">{{ currentCategoryLabel }}</span>
+          <span class="material-symbols-outlined text-muted" style="font-size:18px;">expand_more</span>
+        </button>
+        <ul class="dropdown-menu shadow-sm border-0 rounded-2" style="width: 200px;">
+          <li class="dropdown-item d-flex align-items-center justify-content-between" style="cursor:pointer;"
+            (click)="selectCategory(undefined)">
+            Всі категорії
+            <span *ngIf="!filter.categoryId" class="material-symbols-outlined text-primary"
+              style="font-size:16px;">check</span>
+          </li>
+          <li *ngFor="let cat of categories" class="dropdown-item d-flex align-items-center justify-content-between"
+            style="cursor:pointer;" (click)="selectCategory(cat.id)">
+            <div class="d-flex align-items-center gap-2">
+              <span class="rounded-circle" [style.background-color]="cat.color" style="width:10px; height:10px;"></span>
+              <span class="text-truncate">{{ cat.name }}</span>
+            </div>
+            <span *ngIf="filter.categoryId === cat.id" class="material-symbols-outlined text-primary"
+              style="font-size:16px;">check</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Add Task -->
+    <div class="card border-0 shadow-sm mb-3 rounded-2" *ngIf="currentRoute !== 'completed'">
+      <div class="card-body p-0 d-flex align-items-center px-3" style="min-height:52px;">
+        <span class="material-symbols-outlined text-primary me-3">add_circle</span>
+        <input class="form-control border-0 shadow-none p-0" placeholder="Додати задачу" [(ngModel)]="newTaskTitle"
+          (keyup.enter)="addTask()">
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!isLoading && tasks.length === 0"
+      class="text-center py-5 text-muted d-flex flex-column align-items-center">
+      <span class="material-symbols-outlined mb-2" style="font-size:48px; opacity:.4;">task</span>
+      <p class="mb-0">Задач поки немає</p>
+    </div>
+
+    <!-- Task Rows -->
+    <div class="card border-0 shadow-sm rounded-2 overflow-hidden mb-3" *ngIf="!isLoading && tasks.length > 0">
+      <div *ngFor="let task of tasks" class="task-row d-flex align-items-center px-3 border-bottom"
+        style="min-height:52px; cursor:pointer; transition:background-color .15s;"
+        [class.selected-task]="selectedTask?.id === task.id" (click)="openDetail(task)">
+
+        <input type="checkbox" class="task-checkbox me-3" [checked]="task.isCompleted"
+          (click)="toggleComplete(task, $event)">
+
+        <span class="flex-grow-1 text-truncate pe-2" style="font-size:15px;" [class.text-muted]="task.isCompleted">
+          {{ task.title }}
+        </span>
+
+        <!-- Category dots -->
+        <div class="d-flex gap-1 me-3" *ngIf="task.categories.length">
+          <span *ngFor="let cat of task.categories" class="rounded-circle" [style.background-color]="cat.color"
+            [title]="cat.name" style="width:10px; height:10px; flex-shrink:0;"></span>
+        </div>
+
+        <!-- Due date -->
+        <small *ngIf="task.dueDate" class="text-muted d-flex align-items-center gap-1 me-2"
+          [class.text-danger]="isPastDue(task.dueDate) && !task.isCompleted">
+          <span class="material-symbols-outlined" style="font-size:14px;">event</span>
+          {{ formatDate(task.dueDate) }}
+        </small>
+
+        <!-- Star -->
+        <button class="btn p-0 d-flex align-items-center border-0 bg-transparent shadow-none"
+          (click)="toggleImportant(task, $event)">
+          <span class="material-symbols-outlined" [class.text-primary]="task.isImportant"
+            [class.icon-filled]="task.isImportant" [class.text-muted]="!task.isImportant"
+            [class.icon-outlined]="!task.isImportant" style="font-size:22px;">star</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-auto pt-2" *ngIf="pagedResult && pagedResult.totalPages > 1">
+      <app-pagination [currentPage]="filter.page" [totalPages]="pagedResult.totalPages"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    </div>
+
+  </div>
+
+</div>

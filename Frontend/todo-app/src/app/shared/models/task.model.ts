@@ -42,6 +42,8 @@ export interface TaskFilter {
   search?: string;
   categoryId?: number;
   grouped?: boolean;
+  isCompleted?: boolean;
+  isUnassigned?: boolean;
 }
 
 export interface PagedResult<T> {
