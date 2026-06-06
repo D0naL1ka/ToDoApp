@@ -133,4 +133,11 @@
 
   </div>
 
+  <!-- Detail Panel -->
+  <div *ngIf="selectedTask" class="border-start ms-3 bg-white rounded-2 flex-shrink-0" style="width:340px;">
+    <app-task-detail [task]="selectedTask" [categories]="categories" (taskUpdated)="onTaskUpdated($event)"
+      (taskDeleted)="onTaskDeleted($event)" (categoryChanged)="onCategoryChanged()" (closed)="closeDetail()">
+    </app-task-detail>
+  </div>
+
 </div>

@@ -1,0 +1,238 @@
+<div class="d-flex flex-column h-100 p-3 overflow-auto">
+
+  <!-- Close -->
+  <div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-link text-muted text-decoration-none p-1 shadow-none border-0 d-flex align-items-center"
+      (click)="closed.emit()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+
+  <!-- Title -->
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <input type="checkbox" class="task-checkbox flex-shrink-0" [(ngModel)]="task.isCompleted"
+      (change)="update({ isCompleted: task.isCompleted })">
+    <input type="text" class="form-control border-0 fw-semibold fs-5 p-0 shadow-none bg-transparent"
+      [(ngModel)]="task.title" (blur)="update({ title: task.title })">
+    <button class="btn btn-link p-0 shadow-none border-0 d-flex align-items-center ms-auto text-decoration-none"
+      (click)="update({ isImportant: !task.isImportant })">
+      <span class="material-symbols-outlined fs-4" [class.text-primary]="task.isImportant"
+        [class.text-muted]="!task.isImportant" [class.icon-filled]="task.isImportant"
+        [class.icon-outlined]="!task.isImportant">
+        star
+      </span>
+    </button>
+  </div>
+
+  <!-- Action list -->
+  <div class="list-group list-group-flush mb-4 rounded-2 overflow-hidden border">
+    <!-- My Day -->
+    <button class="list-group-item list-group-item-action d-flex align-items-center gap-3 border-0 py-2 px-3"
+      [class.text-primary]="task.isMyDay" [class.bg-primary]="task.isMyDay" [class.bg-opacity-10]="task.isMyDay"
+      (click)="update({ isMyDay: !task.isMyDay })">
+      <span class="material-symbols-outlined" [class.text-primary]="task.isMyDay"
+        [class.text-muted]="!task.isMyDay">light_mode</span>
+      <span [class.fw-medium]="task.isMyDay">
+        {{ task.isMyDay ? 'Додано в Мій день' : 'Додати в Мій день' }}
+      </span>
+      <span *ngIf="task.isMyDay" class="material-symbols-outlined ms-auto text-primary" style="font-size:18px;"
+        (click)="$event.stopPropagation(); update({ isMyDay: false })">close</span>
+    </button>
+
+    <!-- Due Date -->
+    <div class="list-group-item border-0 py-2 px-3">
+      <div class="d-flex align-items-center gap-3 text-muted mb-2">
+        <span class="material-symbols-outlined" style="font-size:20px;">event</span>
+        <span class="small fw-medium">Дата виконання</span>
+      </div>
+      <input type="date" class="form-control form-control-sm border-0 bg-light shadow-none ms-4"
+        style="width:calc(100% - 32px);" [ngModel]="task.dueDate | date:'yyyy-MM-dd'"
+        (change)="onDateChange('dueDate', $any($event.target).value)">
+    </div>
+
+    <!-- Reminder -->
+    <div class="list-group-item border-0 py-2 px-3">
+      <div class="d-flex align-items-center gap-3 text-muted mb-2">
+        <span class="material-symbols-outlined" style="font-size:20px;">notifications</span>
+        <span class="small fw-medium">Нагадування</span>
+      </div>
+      <input type="datetime-local" class="form-control form-control-sm border-0 bg-light shadow-none ms-4"
+        style="width:calc(100% - 32px);" [ngModel]="task.reminderDate | date:'yyyy-MM-ddTHH:mm'"
+        (change)="update({ reminderDate: $any($event.target).value + ':00' })">
+    </div>
+
+    <!-- Repeat -->
+    <div class="list-group-item border-0 py-2 px-3">
+      <div class="d-flex align-items-center gap-3 text-muted mb-2">
+        <span class="material-symbols-outlined" style="font-size:20px;">repeat</span>
+        <span class="small fw-medium">Повтор</span>
+      </div>
+      <div class="dropdown ms-4">
+        <button class="btn btn-sm btn-light border d-flex align-items-center justify-content-between shadow-none w-100"
+          style="min-width: 200px; text-align: left;" type="button" data-bs-toggle="dropdown">
+          {{ repeatLabel }}
+          <span class="material-symbols-outlined" style="font-size:18px;">expand_more</span>
+        </button>
+        <ul class="dropdown-menu shadow-sm border-0 rounded-2 w-100">
+          <li *ngFor="let opt of repeatOptions" class="dropdown-item d-flex align-items-center justify-content-between"
+            style="cursor:pointer;" (click)="selectRepeatInterval(opt.value)">
+            {{ opt.label }}
+            <span *ngIf="task.repeatInterval === opt.value" class="material-symbols-outlined text-primary"
+              style="font-size:16px;">check</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="list-group-item border-0 py-2 px-3">
+      <div class="d-flex align-items-center gap-3 text-muted mb-2">
+        <span class="material-symbols-outlined" style="font-size:20px;">format_list_bulleted</span>
+        <span class="small fw-medium">Список</span>
+      </div>
+      <div class="dropdown ms-4">
+        <button class="btn btn-sm btn-light border d-flex align-items-center justify-content-between shadow-none w-100"
+          style="min-width: 200px; text-align: left;" type="button" data-bs-toggle="dropdown">
+          {{ taskListLabel }}
+          <span class="material-symbols-outlined" style="font-size:18px;">expand_more</span>
+        </button>
+        <ul class="dropdown-menu shadow-sm border-0 rounded-2 w-100">
+          <li class="dropdown-item d-flex align-items-center justify-content-between" style="cursor:pointer;"
+            (click)="update({ taskListId: null })">
+            Без списку
+            <span *ngIf="task.taskListId === null" class="material-symbols-outlined text-primary"
+              style="font-size:16px;">check</span>
+          </li>
+          <li *ngFor="let list of taskLists" class="dropdown-item d-flex align-items-center justify-content-between"
+            style="cursor:pointer;" (click)="update({ taskListId: list.id })">
+            <div class="d-flex align-items-center gap-2">
+              <span class="material-symbols-outlined" style="font-size:20px;">format_list_bulleted</span>
+              {{ list.name }}
+            </div>
+            <span *ngIf="task.taskListId === list.id" class="material-symbols-outlined text-primary"
+              style="font-size:16px;">check</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="border rounded-2 p-3 mb-4">
+    <div class="d-flex align-items-center gap-3 text-muted mb-2">
+      <span class="material-symbols-outlined" style="font-size:20px;">sell</span>
+      <span class="small fw-medium">Категорії</span>
+    </div>
+
+    <!-- Active badges -->
+    <div class="d-flex flex-wrap gap-2 ms-4 mb-2" *ngIf="task.categories?.length">
+      <span *ngFor="let cat of task.categories"
+        class="badge d-inline-flex align-items-center gap-1 rounded-pill fw-normal"
+        style="font-size:13px; padding:5px 10px; cursor:pointer;" [style.background-color]="cat.color + '22'"
+        [style.color]="cat.color" [style.border]="'1px solid ' + cat.color + '55'">
+        {{ cat.name }}
+        <span class="material-symbols-outlined" style="font-size:14px;" (click)="toggleCategory(cat)">close</span>
+      </span>
+    </div>
+
+    <!-- Dropdown -->
+    <div class="dropdown ms-4">
+      <button class="btn btn-sm btn-light border d-flex align-items-center gap-1 shadow-none" type="button"
+        data-bs-toggle="dropdown" data-bs-auto-close="outside">
+        <span class="material-symbols-outlined" style="font-size:16px;">add</span>
+        Додати категорію
+      </button>
+
+      <div class="dropdown-menu p-0 border shadow-sm rounded-2" style="width:280px;">
+
+        <!-- New category input -->
+        <div class="p-2 border-bottom bg-light">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control shadow-none" placeholder="Створити нову..."
+              [(ngModel)]="newCategoryName" (keyup.enter)="addNewCategory($event)">
+            <button class="btn btn-primary d-flex align-items-center px-2 shadow-none" (click)="addNewCategory($event)"
+              [disabled]="!newCategoryName.trim()">
+              <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Category list -->
+        <div style="max-height:240px; overflow-y:auto;" class="p-1">
+
+          <div *ngIf="categories.length === 0" class="text-center text-muted small py-3">Немає категорій</div>
+
+          <ng-container *ngFor="let cat of categories">
+
+            <!-- View mode -->
+            <div *ngIf="editingCategoryId !== cat.id" class="d-flex align-items-center gap-2 px-2 py-2 rounded"
+              style="cursor:pointer;" (click)="toggleCategory(cat, $event)">
+              <span class="rounded-circle flex-shrink-0" [style.background-color]="cat.color"
+                style="width:12px; height:12px; border:1px solid rgba(0,0,0,.1);"></span>
+              <span class="flex-grow-1 text-truncate" [class.fw-medium]="hasCategory(cat)">{{ cat.name }}</span>
+              <span *ngIf="hasCategory(cat)" class="material-symbols-outlined text-primary flex-shrink-0"
+                style="font-size:18px;">check</span>
+              <div class="d-flex gap-1 flex-shrink-0" *ngIf="!cat.isSystem" (click)="$event.stopPropagation()">
+                <button class="btn btn-sm btn-link p-0 text-muted shadow-none" (click)="startEditCategory(cat, $event)">
+                  <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
+                </button>
+                <button class="btn btn-sm btn-link p-0 text-danger shadow-none"
+                  (click)="openDeleteCategoryDialog(cat, $event)">
+                  <span class="material-symbols-outlined" style="font-size:16px;">delete</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Edit mode -->
+            <div *ngIf="editingCategoryId === cat.id"
+              class="d-flex gap-1 align-items-center px-2 py-1 border rounded-1 bg-white mx-1 mb-1"
+              (click)="$event.stopPropagation()">
+              <input type="text" class="form-control form-control-sm border-0 shadow-none px-1"
+                [(ngModel)]="editingCategoryName" (keyup.enter)="saveCategoryEdit(cat, $event)" autofocus>
+              <button class="btn btn-sm btn-link text-primary p-0 d-flex align-items-center shadow-none"
+                (click)="saveCategoryEdit(cat, $event)">
+                <span class="material-symbols-outlined" style="font-size:18px;">check</span>
+              </button>
+              <button class="btn btn-sm btn-link text-muted p-0 d-flex align-items-center shadow-none"
+                (click)="editingCategoryId = null; $event.stopPropagation()">
+                <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+              </button>
+            </div>
+
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="mb-3">
+    <textarea class="form-control border-0 bg-light rounded-2 shadow-none" rows="4" [(ngModel)]="task.description"
+      (blur)="update({ description: task.description })" placeholder="Додати нотатку...">
+    </textarea>
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+    <small class="text-muted d-flex align-items-center gap-2">
+      <span class="material-symbols-outlined" style="font-size:16px;">history</span>
+      Створено {{ task.createdAt | date:'dd.MM.yyyy' }}
+    </small>
+    <button class="btn btn-link text-danger p-0 shadow-none text-decoration-none border-0 d-flex align-items-center"
+      (click)="openDeleteTaskDialog()">
+      <span class="material-symbols-outlined">delete</span>
+    </button>
+  </div>
+
+  <!-- Dialogs -->
+  <app-confirm-dialog [isVisible]="showDeleteTaskDialog" title="Видалити задачу"
+    [message]="'Видалити задачу «' + task.title + '»?'" confirmText="Видалити" (confirmed)="onDeleteTaskConfirmed()"
+    (cancelled)="showDeleteTaskDialog = false">
+  </app-confirm-dialog>
+
+  <app-confirm-dialog [isVisible]="showDeleteCategoryDialog" title="Видалити категорію"
+    [message]="'Видалити категорію «' + (categoryToDelete?.name || '') + '»?'" confirmText="Видалити"
+    (confirmed)="onDeleteCategoryConfirmed()" (cancelled)="showDeleteCategoryDialog = false; categoryToDelete = null">
+  </app-confirm-dialog>
+
+</div>

@@ -10,6 +10,7 @@ import { TaskService } from '../../../core/services/task.service';
 import { CategoryService } from '../../../core/services/category.service';
 import { Task, TaskFilter, PagedResult } from '../../../shared/models/task.model';
 import { Category } from '../../../shared/models/category.model';
+import { TaskDetailComponent } from './task-detail.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 export interface SortOption {
@@ -30,7 +31,7 @@ const NON_PAGED_ROUTES = new Set(['myday', 'important', 'planned']);
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaginationComponent],
+  imports: [CommonModule, FormsModule, TaskDetailComponent, PaginationComponent],
   templateUrl: './task-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
