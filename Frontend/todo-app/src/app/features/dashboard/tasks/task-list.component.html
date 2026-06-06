@@ -3,18 +3,20 @@
   <div class="flex-grow-1 d-flex flex-column">
 
     <!-- Header -->
-    <div class="d-flex align-items-center mb-3">
-      <span class="material-symbols-outlined text-primary me-2 fs-4" *ngIf="currentRoute === 'myday'">light_mode</span>
-      <span class="material-symbols-outlined text-warning me-2 fs-4" *ngIf="currentRoute === 'important'">star</span>
-      <span class="material-symbols-outlined text-success me-2 fs-4" *ngIf="currentRoute === 'planned'">event</span>
-      <span class="material-symbols-outlined text-primary me-2 fs-4" *ngIf="currentRoute === 'tasks'">home</span>
+    <div class="d-flex align-items-center mb-3 mt-3 px-2">
+      <span class="material-symbols-outlined text-primary me-2 fs-1" *ngIf="currentRoute === 'myday'">light_mode</span>
+      <span class="material-symbols-outlined text-warning me-2 fs-1" *ngIf="currentRoute === 'important'">star</span>
+      <span class="material-symbols-outlined text-success me-2 fs-1" *ngIf="currentRoute === 'planned'">event</span>
+      <span class="material-symbols-outlined text-primary me-2 fs-1" *ngIf="currentRoute === 'tasks'">home</span>
       <span class="material-symbols-outlined text-primary me-2 fs-4"
         *ngIf="currentRoute === 'list'">format_list_bulleted</span>
       <h4 class="fw-bold mb-0">{{ pageTitle }}</h4>
     </div>
 
-    <div class="d-flex gap-2 mb-3">
+    <!-- Search + Filter -->
+    <div class="d-flex flex-column flex-md-row gap-2 mb-3">
 
+      <!-- Search-->
       <div class="input-group">
         <span class="input-group-text bg-white border-end-0">
           <span class="material-symbols-outlined text-muted" style="font-size:20px;">search</span>
@@ -23,53 +25,58 @@
           (input)="onSearch()">
       </div>
 
-      <div class="dropdown">
-        <button class="form-control d-flex justify-content-between align-items-center shadow-none text-muted"
-          style="width: 220px; cursor: pointer; text-align: left;" type="button" data-bs-toggle="dropdown">
-          <span class="text-truncate">{{ currentSortLabel }}</span>
-          <span class="material-symbols-outlined text-muted" style="font-size:18px;">expand_more</span>
-        </button>
-        <ul class="dropdown-menu shadow-sm border-0 rounded-2" style="width: 220px;">
-          <li *ngFor="let opt of sortOptions" class="dropdown-item d-flex align-items-center justify-content-between"
-            style="cursor:pointer;" (click)="selectSort(opt.value)">
-            {{ opt.label }}
-            <span *ngIf="currentSort === opt.value" class="material-symbols-outlined text-primary"
-              style="font-size:16px;">check</span>
-          </li>
-        </ul>
-      </div>
+      <!-- Sort + Category -->
+      <div class="d-flex gap-2">
 
-      <div class="dropdown">
-        <button class="form-control d-flex justify-content-between align-items-center shadow-none text-muted"
-          style="width: 200px; cursor: pointer; text-align: left;" type="button" data-bs-toggle="dropdown">
-          <span class="text-truncate">{{ currentCategoryLabel }}</span>
-          <span class="material-symbols-outlined text-muted" style="font-size:18px;">expand_more</span>
-        </button>
-        <ul class="dropdown-menu shadow-sm border-0 rounded-2" style="width: 200px;">
-          <li class="dropdown-item d-flex align-items-center justify-content-between" style="cursor:pointer;"
-            (click)="selectCategory(undefined)">
-            Всі категорії
-            <span *ngIf="!filter.categoryId" class="material-symbols-outlined text-primary"
-              style="font-size:16px;">check</span>
-          </li>
-          <li *ngFor="let cat of categories" class="dropdown-item d-flex align-items-center justify-content-between"
-            style="cursor:pointer;" (click)="selectCategory(cat.id)">
-            <div class="d-flex align-items-center gap-2">
-              <span class="rounded-circle" [style.background-color]="cat.color" style="width:10px; height:10px;"></span>
-              <span class="text-truncate">{{ cat.name }}</span>
-            </div>
-            <span *ngIf="filter.categoryId === cat.id" class="material-symbols-outlined text-primary"
-              style="font-size:16px;">check</span>
-          </li>
-        </ul>
-      </div>
+        <div class="dropdown flex-grow-1 flex-md-grow-0">
+          <button class="form-control d-flex justify-content-between align-items-center shadow-none text-muted w-100"
+            style="min-width:0; cursor:pointer;" type="button" data-bs-toggle="dropdown">
+            <span class="text-truncate">{{ currentSortLabel }}</span>
+            <span class="material-symbols-outlined text-muted flex-shrink-0" style="font-size:18px;">expand_more</span>
+          </button>
+          <ul class="dropdown-menu shadow-sm border-0 rounded-2" style="min-width:200px;">
+            <li *ngFor="let opt of sortOptions" class="dropdown-item d-flex align-items-center justify-content-between"
+              style="cursor:pointer;" (click)="selectSort(opt.value)">
+              {{ opt.label }}
+              <span *ngIf="currentSort === opt.value" class="material-symbols-outlined text-primary"
+                style="font-size:16px;">check</span>
+            </li>
+          </ul>
+        </div>
 
+        <div class="dropdown flex-grow-1 flex-md-grow-0">
+          <button class="form-control d-flex justify-content-between align-items-center shadow-none text-muted w-100"
+            style="min-width:0; cursor:pointer;" type="button" data-bs-toggle="dropdown">
+            <span class="text-truncate">{{ currentCategoryLabel }}</span>
+            <span class="material-symbols-outlined text-muted flex-shrink-0" style="font-size:18px;">expand_more</span>
+          </button>
+          <ul class="dropdown-menu shadow-sm border-0 rounded-2" style="min-width:180px;">
+            <li class="dropdown-item d-flex align-items-center justify-content-between" style="cursor:pointer;"
+              (click)="selectCategory(undefined)">
+              Всі категорії
+              <span *ngIf="!filter.categoryId" class="material-symbols-outlined text-primary"
+                style="font-size:16px;">check</span>
+            </li>
+            <li *ngFor="let cat of categories" class="dropdown-item d-flex align-items-center justify-content-between"
+              style="cursor:pointer;" (click)="selectCategory(cat.id)">
+              <div class="d-flex align-items-center gap-2">
+                <span class="rounded-circle flex-shrink-0" [style.background-color]="cat.color"
+                  style="width:10px; height:10px;"></span>
+                <span class="text-truncate">{{ cat.name }}</span>
+              </div>
+              <span *ngIf="filter.categoryId === cat.id" class="material-symbols-outlined text-primary"
+                style="font-size:16px;">check</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
     </div>
 
     <!-- Add Task -->
     <div class="card border-0 shadow-sm mb-3 rounded-2" *ngIf="currentRoute !== 'completed'">
       <div class="card-body p-0 d-flex align-items-center px-3" style="min-height:52px;">
-        <span class="material-symbols-outlined text-primary me-3">add_circle</span>
+        <span class="material-symbols-outlined text-primary me-3 fs-4">add_circle</span>
         <input class="form-control border-0 shadow-none p-0" placeholder="Додати задачу" [(ngModel)]="newTaskTitle"
           (keyup.enter)="addTask()">
       </div>
@@ -134,9 +141,11 @@
   </div>
 
   <!-- Detail Panel -->
-  <div *ngIf="selectedTask" class="border-start ms-3 bg-white rounded-2 flex-shrink-0" style="width:340px;">
+  <div *ngIf="selectedTask"
+    class="border-start ms-0 ms-md-3 bg-white shadow-sm rounded-1 flex-shrink-0 task-detail-mobile"
+    style="width: 340px;">
     <app-task-detail [task]="selectedTask" [categories]="categories" (taskUpdated)="onTaskUpdated($event)"
-      (taskDeleted)="onTaskDeleted($event)" (categoryChanged)="onCategoryChanged()" (closed)="closeDetail()">
+      (taskDeleted)="onTaskDeleted($event)" (closed)="closeDetail()">
     </app-task-detail>
   </div>
 

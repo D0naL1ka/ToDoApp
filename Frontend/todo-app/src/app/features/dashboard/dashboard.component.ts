@@ -10,4 +10,14 @@ import { SidebarComponent } from '../../shared/components/sidebar/sidebar.compon
   imports: [CommonModule, RouterOutlet, NavbarComponent, SidebarComponent],
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  isSidebarOpen = false;
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
+  }
+}

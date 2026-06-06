@@ -1,6 +1,6 @@
 <div class="d-flex flex-column h-100 bg-white border-end sidebar-container" [class.collapsed]="isCollapsed">
 
-  <div class="p-2 ms-2 mt-1 mb-1">
+  <div class="p-2 ms-2 mt-1 mb-1 d-none d-md-block">
     <button class="btn btn-sm btn-link text-decoration-none text-dark p-1 d-flex align-items-center"
       (click)="toggleSidebar()">
       <span class="material-symbols-outlined" style="font-size: 24px;">menu</span>
@@ -10,31 +10,31 @@
   <div class="px-2">
     <a routerLink="/myday" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
       class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
-      <span class="material-symbols-outlined me-3">light_mode</span>
+      <span class="material-symbols-outlined me-3 fs-4">light_mode</span>
       <span class="hide-on-collapse">Мій день</span>
       <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.myDay > 0">{{ counts.myDay }}</span>
     </a>
     <a routerLink="/important" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
       class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
-      <span class="material-symbols-outlined me-3">star</span>
+      <span class="material-symbols-outlined me-3 fs-4">star</span>
       <span class="hide-on-collapse">Важливо</span>
       <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.important > 0">{{ counts.important }}</span>
     </a>
     <a routerLink="/planned" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
       class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
-      <span class="material-symbols-outlined me-3">event</span>
+      <span class="material-symbols-outlined me-3 fs-4">event</span>
       <span class="hide-on-collapse">Заплановано</span>
       <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.planned > 0">{{ counts.planned }}</span>
     </a>
     <a routerLink="/tasks" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
       class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
-      <span class="material-symbols-outlined me-3">home</span>
+      <span class="material-symbols-outlined me-3 4">home</span>
       <span class="hide-on-collapse">Всі задачі</span>
       <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.all > 0">{{ counts.all }}</span>
     </a>
     <a routerLink="/completed" routerLinkActive="active bg-primary bg-opacity-10 text-primary"
       class="d-flex align-items-center px-3 rounded text-decoration-none text-dark sidebar-item">
-      <span class="material-symbols-outlined me-3">task_alt</span>
+      <span class="material-symbols-outlined me-3 fs-4">task_alt</span>
       <span class="hide-on-collapse">Завершені</span>
       <span class="text-muted small ms-auto hide-on-collapse" *ngIf="counts.completed > 0">{{ counts.completed }}</span>
     </a>
@@ -95,7 +95,7 @@
       (click)="isAddingList = true">
       <span class="material-symbols-outlined me-3">add</span>
       <span class="hide-on-collapse flex-grow-1">Створити список</span>
-      <span class="material-symbols-outlined hide-on-collapse ms-auto" style="font-size: 20px;">create_new_folder</span>
+      <span class="material-symbols-outlined hide-on-collapse ms-auto fs-4">create_new_folder</span>
     </div>
   </div>
   <app-confirm-dialog [isVisible]="showDeleteListDialog" title="Видалити список"

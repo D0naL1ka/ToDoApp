@@ -19,10 +19,10 @@ export interface SortOption {
 }
 
 const PAGE_TITLES: Record<string, string> = {
-  tasks:     'Всі задачі',
-  myday:     'Мій день',
+  tasks: 'Всі задачі',
+  myday: 'Мій день',
   important: 'Важливо',
-  planned:   'Заплановано',
+  planned: 'Заплановано',
   completed: 'Завершені'
 };
 
@@ -51,9 +51,9 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   readonly sortOptions: SortOption[] = [
     { label: 'За замовчуванням', value: 'default' },
-    { label: 'Найближчі дати',   value: 'dueDateAsc' },
-    { label: 'Найдальші дати',   value: 'dueDateDesc' },
-    { label: 'Спочатку нові',    value: 'createdAtDesc' }
+    { label: 'Найближчі дати', value: 'dueDateAsc' },
+    { label: 'Найдальші дати', value: 'dueDateDesc' },
+    { label: 'Спочатку нові', value: 'createdAtDesc' }
   ];
 
   private readonly destroy$ = new Subject<void>();
@@ -63,7 +63,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     private readonly categoryService: CategoryService,
     private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.params
@@ -131,10 +131,10 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   private loadSystemTasks(): void {
     const loaders: Record<string, () => any> = {
-      myday:     () => this.taskService.getMyDay(),
+      myday: () => this.taskService.getMyDay(),
       important: () => this.taskService.getImportant(),
-      planned:   () => this.taskService.getPlanned(),
-      tasks:     () => this.taskService.getAll({
+      planned: () => this.taskService.getPlanned(),
+      tasks: () => this.taskService.getAll({
         ...this.filter, isCompleted: false, isUnassigned: true
       }),
       completed: () => this.taskService.getAll({
@@ -199,7 +199,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
       if (this.currentSort === 'createdAtDesc') {
         return new Date(b.createdAt ?? 0).getTime() -
-               new Date(a.createdAt ?? 0).getTime();
+          new Date(a.createdAt ?? 0).getTime();
       }
 
       return 0;

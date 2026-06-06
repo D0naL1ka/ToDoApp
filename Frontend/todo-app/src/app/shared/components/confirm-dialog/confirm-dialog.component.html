@@ -1,39 +1,34 @@
 <div *ngIf="isVisible">
 
-  <!-- Backdrop -->
-  <div class="modal-backdrop fade show" (click)="cancel()"></div>
+    <!-- Backdrop -->
+    <div class="modal-backdrop fade show" (click)="cancel()"></div>
 
-  <!-- Dialog -->
-  <div class="modal d-block" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
-      <div class="modal-content border-0 shadow">
+    <!-- Dialog -->
+    <div class="modal d-block" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content border-0 shadow">
 
-        <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fw-semibold">{{ title }}</h5>
-          <button class="btn-close" (click)="cancel()"></button>
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-semibold">{{ title }}</h5>
+                    <button class="btn-close" (click)="cancel()"></button>
+                </div>
+
+                <div class="modal-body py-3">
+                    <p class="text-muted mb-0">{{ message }}</p>
+                </div>
+
+                <div class="modal-footer border-0 pt-0 gap-2">
+                    <button class="btn btn-outline-secondary" (click)="cancel()">
+                        {{ cancelText }}
+                    </button>
+                    <button class="btn" [class.btn-danger]="isDanger" [class.btn-primary]="!isDanger"
+                        (click)="confirm()">
+                        {{ confirmText }}
+                    </button>
+                </div>
+
+            </div>
         </div>
-
-        <div class="modal-body py-3">
-          <p class="text-muted mb-0">{{ message }}</p>
-        </div>
-
-        <div class="modal-footer border-0 pt-0 gap-2">
-          <button
-            class="btn btn-outline-secondary"
-            (click)="cancel()">
-            {{ cancelText }}
-          </button>
-          <button
-            class="btn"
-            [class.btn-danger]="isDanger"
-            [class.btn-primary]="!isDanger"
-            (click)="confirm()">
-            {{ confirmText }}
-          </button>
-        </div>
-
-      </div>
     </div>
-  </div>
 
 </div>

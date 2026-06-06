@@ -15,7 +15,8 @@ namespace TodoApp.Application.Validators.Task
                 .MaximumLength(1000).WithMessage("Description max 1000 characters");
 
             RuleFor(x => x.DueDate)
-                .GreaterThan(DateTime.UtcNow).WithMessage("Due date must be in the future")
+                .GreaterThanOrEqualTo(DateTime.UtcNow.Date)
+                .WithMessage("Due date must be today or in the future")
                 .When(x => x.DueDate.HasValue);
         }
     }

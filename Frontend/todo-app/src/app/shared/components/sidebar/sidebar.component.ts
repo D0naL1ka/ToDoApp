@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef
+  ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -32,6 +32,10 @@ const EMPTY_COUNTS: SystemCount = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  // Додаємо Output подію для зв'язку з Dashboard
+  @Output() listSelected = new EventEmitter<void>();
+  @Output() toggleMenu = new EventEmitter<void>(); 
+
   isCollapsed = false;
   taskLists: TaskList[] = [];
   newListName = '';
@@ -115,6 +119,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
+    this.toggleMenu.emit();
   }
 
   addList(): void {
@@ -128,6 +133,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           this.newListName = '';
           this.isAddingList = false;
           this.router.navigate(['/list', list.id]);
+          this.listSelected.emit();
           this.cdr.markForCheck();
         }
       });
@@ -171,6 +177,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         next: () => {
           this.taskLists = this.taskLists.filter(l => l.id !== listId);
           this.router.navigate(['/tasks']);
+          this.listSelected.emit();
           this.cdr.markForCheck();
         }
       });

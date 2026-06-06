@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -9,7 +9,8 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {
-  constructor(public authService: AuthService) {}
+  @Output() menuToggle = new EventEmitter<void>();
+  constructor(public authService: AuthService) { }
 
   logout(): void {
     this.authService.logout();
