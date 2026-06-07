@@ -9,11 +9,13 @@ namespace TodoApp.Application.Services
     public class TaskListService : ITaskListService
     {
         private readonly ITaskListRepository _taskListRepository;
+        private readonly ITaskRepository _taskRepository;
         private readonly IMapper _mapper;
 
-        public TaskListService(ITaskListRepository taskListRepository, IMapper mapper)
+        public TaskListService(ITaskListRepository taskListRepository, ITaskRepository taskRepository, IMapper mapper)
         {
             _taskListRepository = taskListRepository;
+            _taskRepository = taskRepository;
             _mapper = mapper;
         }
 
@@ -53,7 +55,15 @@ namespace TodoApp.Application.Services
             var list = await _taskListRepository.GetByIdAsync(id);
             if (list == null || list.UserId != userId)
                 throw new Exception("List not found");
+
+            var tasks = await _taskRepository.GetByTaskListAsync(id, userId);
+            foreach (var task in tasks)
+            {
+                await _taskRepository.DeleteAsync(task.Id);
+            }
+
             await _taskListRepository.DeleteAsync(id);
         }
+
     }
 }

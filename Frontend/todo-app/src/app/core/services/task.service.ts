@@ -6,12 +6,12 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-    private apiUrl = `${environment.apiUrl}/tasks`;
-private taskChangedSource = new Subject<void>();
+  private apiUrl = `${environment.apiUrl}/tasks`;
+  private taskChangedSource = new Subject<void>();
   taskChanged$ = this.taskChangedSource.asObservable();
 
-  constructor(private http: HttpClient) {}
-notifyTaskChange() {
+  constructor(private http: HttpClient) { }
+  notifyTaskChange() {
     this.taskChangedSource.next();
   }
 
@@ -28,8 +28,8 @@ notifyTaskChange() {
       params = params.set('isCompleted', filter.isCompleted.toString());
     }
     if (filter.isUnassigned !== undefined && filter.isUnassigned !== null) {
-  params = params.set('isUnassigned', filter.isUnassigned.toString());
-}
+      params = params.set('isUnassigned', filter.isUnassigned.toString());
+    }
 
     return this.http.get<PagedResult<Task>>(this.apiUrl, { params });
   }

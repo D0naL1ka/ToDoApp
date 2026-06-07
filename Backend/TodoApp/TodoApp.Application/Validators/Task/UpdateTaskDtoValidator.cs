@@ -14,10 +14,12 @@ namespace TodoApp.Application.Validators.Task
             RuleFor(x => x.Description)
                 .MaximumLength(1000).WithMessage("Description max 1000 characters");
 
+            /*
             RuleFor(x => x.DueDate)
-                .GreaterThanOrEqualTo(DateTime.UtcNow.Date)
+                .GreaterThan(DateTime.UtcNow.Date)
                 .WithMessage("Due date must be today or in the future")
                 .When(x => x.DueDate.HasValue);
+            */
         }
     }
 }

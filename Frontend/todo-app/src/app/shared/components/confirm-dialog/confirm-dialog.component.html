@@ -1,34 +1,30 @@
-<div *ngIf="isVisible">
+<div *ngIf="isVisible"
+     class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+     style="background:rgba(0,0,0,0.5); z-index:2000;">
 
-    <!-- Backdrop -->
-    <div class="modal-backdrop fade show" (click)="cancel()"></div>
+  <div class="bg-white rounded-3 shadow p-4 mx-3" style="max-width:340px; width:100%;">
 
-    <!-- Dialog -->
-    <div class="modal d-block" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
-            <div class="modal-content border-0 shadow">
-
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-semibold">{{ title }}</h5>
-                    <button class="btn-close" (click)="cancel()"></button>
-                </div>
-
-                <div class="modal-body py-3">
-                    <p class="text-muted mb-0">{{ message }}</p>
-                </div>
-
-                <div class="modal-footer border-0 pt-0 gap-2">
-                    <button class="btn btn-outline-secondary" (click)="cancel()">
-                        {{ cancelText }}
-                    </button>
-                    <button class="btn" [class.btn-danger]="isDanger" [class.btn-primary]="!isDanger"
-                        (click)="confirm()">
-                        {{ confirmText }}
-                    </button>
-                </div>
-
-            </div>
-        </div>
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h6 class="fw-bold mb-0">{{ title }}</h6>
+      <button class="btn btn-link text-decoration-none p-0 shadow-none border-0 d-flex align-items-center"
+              (click)="cancelled.emit()">
+        <span class="material-symbols-outlined" style="font-size:20px;">close</span>
+      </button>
     </div>
 
+    <!-- Message -->
+    <p class="text-muted small mb-4">{{ message }}</p>
+
+    <!-- Buttons -->
+    <div class="d-flex flex-column gap-2">
+      <button class="btn btn-danger w-100" (click)="confirmed.emit()">
+        {{ confirmText }}
+      </button>
+      <button class="btn btn-outline-secondary w-100" (click)="cancelled.emit()">
+        Скасувати
+      </button>
+    </div>
+
+  </div>
 </div>

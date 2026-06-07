@@ -12,7 +12,8 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.RegisterAutoMapper(); 
 builder.Services.AddValidation();
-builder.Services.AddCorsPolicy();
+//builder.Services.AddCorsPolicy();
+builder.Services.AddCorsPolicy(builder.Configuration);
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -23,12 +24,15 @@ builder.Services.AddSwagger();
 
 var app = builder.Build();
 
+/*
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+*/
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("AllowAngular");

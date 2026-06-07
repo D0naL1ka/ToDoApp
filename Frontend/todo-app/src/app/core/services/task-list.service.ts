@@ -8,9 +8,9 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TaskListService {
-    private apiUrl = `${environment.apiUrl}/tasklists`;
+  private apiUrl = `${environment.apiUrl}/tasklists`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<TaskList[]> {
     return this.http.get<TaskList[]>(this.apiUrl);

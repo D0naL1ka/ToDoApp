@@ -112,15 +112,18 @@ namespace TodoApp.API.Extensions
             });
         }
 
-        public static void AddCorsPolicy(this IServiceCollection services)
+        public static void AddCorsPolicy(this IServiceCollection services, IConfiguration config)
         {
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngular", policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
+                    policy.WithOrigins(
+                        "http://localhost:4200", // local development
+                        "https://splendorous-dango-8372dd.netlify.app" // production frontend
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
                 });
             });
         }

@@ -116,16 +116,31 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: tasks => {
-          const raw = Array.isArray(tasks) ? tasks : [];
-          this.tasks = this.applySorting(this.applyLocalFilters(raw));
-          this.pagedResult = null;
+          const raw = this.applySorting(this.applyLocalFilters(
+            Array.isArray(tasks) ? tasks : []
+          ));
+
+          const totalCount = raw.length;
+          const pageSize = this.filter.pageSize ?? 10;
+          const page = this.filter.page ?? 1;
+
+          const start = (page - 1) * pageSize;
+          this.tasks = raw.slice(start, start + pageSize);
+
+          this.pagedResult = totalCount > pageSize ? {
+            items: this.tasks,
+            totalCount,
+            page,
+            pageSize,
+            totalPages: Math.ceil(totalCount / pageSize),
+            hasNext: page < Math.ceil(totalCount / pageSize),
+            hasPrevious: page > 1
+          } : null;
+
           this.isLoading = false;
           this.cdr.markForCheck();
         },
-        error: () => {
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        }
+        error: () => { this.isLoading = false; this.cdr.markForCheck(); }
       });
   }
 

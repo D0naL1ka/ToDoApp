@@ -76,9 +76,13 @@
     <!-- Add Task -->
     <div class="card border-0 shadow-sm mb-3 rounded-2" *ngIf="currentRoute !== 'completed'">
       <div class="card-body p-0 d-flex align-items-center px-3" style="min-height:52px;">
-        <span class="material-symbols-outlined text-primary me-3 fs-4">add_circle</span>
         <input class="form-control border-0 shadow-none p-0" placeholder="Додати задачу" [(ngModel)]="newTaskTitle"
           (keyup.enter)="addTask()">
+
+        <button class="btn btn-primary btn-sm ms-2 rounded-circle d-flex align-items-center justify-content-center"
+          style="width: 32px; height: 32px;" [disabled]="!newTaskTitle.trim()" (click)="addTask()">
+          <span class="material-symbols-outlined fs-5">add</span>
+        </button>
       </div>
     </div>
 
@@ -114,8 +118,9 @@
         </div>
 
         <!-- Due date -->
-        <small *ngIf="task.dueDate" class="text-muted d-flex align-items-center gap-1 me-2"
-          [class.text-danger]="isPastDue(task.dueDate) && !task.isCompleted">
+        <small *ngIf="task.dueDate" class="d-flex align-items-center gap-1 me-2"
+          [class.text-danger]="isPastDue(task.dueDate) && !task.isCompleted"
+          [class.text-muted]="!isPastDue(task.dueDate) || task.isCompleted">
           <span class="material-symbols-outlined" style="font-size:14px;">event</span>
           {{ formatDate(task.dueDate) }}
         </small>
@@ -143,7 +148,7 @@
   <!-- Detail Panel -->
   <div *ngIf="selectedTask"
     class="border-start ms-0 ms-md-3 bg-white shadow-sm rounded-1 flex-shrink-0 task-detail-mobile"
-    style="width: 340px;">
+    style="width:340px; height:100%; overflow-y:auto;">
     <app-task-detail [task]="selectedTask" [categories]="categories" (taskUpdated)="onTaskUpdated($event)"
       (taskDeleted)="onTaskDeleted($event)" (closed)="closeDetail()">
     </app-task-detail>

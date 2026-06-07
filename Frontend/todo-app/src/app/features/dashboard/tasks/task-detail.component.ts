@@ -95,10 +95,6 @@ export class TaskDetailComponent implements OnInit, OnChanges, OnDestroy {
             ?? 'Без списку';
     }
 
-    getTodayDate(): string {
-        return new Date().toISOString().split('T')[0];
-    }
-
     getTodayDateTime(): string {
         const now = new Date();
         return now.toISOString().slice(0, 16);
@@ -109,14 +105,44 @@ export class TaskDetailComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     onDateChange(field: 'dueDate' | 'reminderDate', value: string): void {
+        const currentValue = field === 'dueDate'
+            ? (this.task.dueDate ? new Date(this.task.dueDate).toISOString().split('T')[0] : '')
+            : (this.task.reminderDate ? this.task.reminderDate.substring(0, 16) : '');
+
+        if (value === currentValue) return;
+
         if (!value) {
             this.update({ [field]: null });
             return;
         }
+
         const formatted = field === 'dueDate'
             ? `${value}T00:00:00`
             : `${value}:00`;
+
         this.update({ [field]: formatted });
+    }
+
+    onReminderChange(value: string): void {
+        const current = this.task.reminderDate
+            ? this.task.reminderDate.substring(0, 16)
+            : '';
+
+        if (value === current) return;
+
+        if (!value) {
+            this.update({ reminderDate: null });
+            return;
+        }
+
+        this.update({ reminderDate: value + ':00' });
+    }
+
+    isPastDue(date: string | null): boolean {
+        if (!date) return false;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return new Date(date) < today;
     }
 
     private loadTaskLists(): void {

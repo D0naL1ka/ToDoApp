@@ -24,12 +24,17 @@ public class TaskService : ITaskService
                 userId, filter.Page, filter.PageSize, filter.Search, filter.CategoryId, filter.Grouped,
                 filter.IsCompleted, filter.IsUnassigned);
 
+        var totalPages = (int)Math.Ceiling((double)totalCount / filter.PageSize);
+
         return new PagedResultDto<TaskDto>
         {
             Items = _mapper.Map<IEnumerable<TaskDto>>(items),
             TotalCount = totalCount,
             Page = filter.Page,
-            PageSize = filter.PageSize
+            PageSize = filter.PageSize,
+            TotalPages = totalPages,
+            HasPrevious = filter.Page > 1,
+            HasNext = filter.Page < totalPages
         };
     }
 

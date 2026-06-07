@@ -68,13 +68,14 @@
           <span class="badge bg-secondary ms-auto hide-on-collapse">{{ list.taskCount }}</span>
         </a>
 
-        <div class="d-flex align-items-center hide-on-collapse ms-2">
-          <button class="btn btn-sm btn-link text-decoration-none text-muted p-0" (click)="startEdit(list)"
-            title="Редагувати">
+        <div class="d-flex align-items-center justify-content-center hide-on-collapse ms-2">
+          <button class="btn btn-sm btn-link text-decoration-none text-muted p-0 d-flex align-items-center"
+            (click)="startEdit(list)" title="Редагувати">
             <span class="material-symbols-outlined" style="font-size: 18px;">edit</span>
           </button>
-          <button class="btn btn-sm btn-link text-decoration-none text-danger p-0 ms-1" title="Видалити"
-            (click)="openDeleteListDialog(list, $event)">
+
+          <button class="btn btn-sm btn-link text-decoration-none text-danger p-0 ms-2 d-flex align-items-center"
+            title="Видалити" (click)="openDeleteListDialog(list, $event)">
             <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
           </button>
         </div>

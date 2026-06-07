@@ -1,4 +1,5 @@
-<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light p-3">  <div class="card shadow w-100" style="max-width: 350px;">
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light p-3">
+  <div class="card shadow w-100" style="max-width: 350px;">
     <div class="card-body p-4">
 
       <div class="text-center mb-4">
@@ -20,20 +21,9 @@
 
         <div class="mb-3">
           <label class="form-label">Пароль</label>
-          <div class="input-group has-validation password-group">
-            <input [type]="showPassword ? 'text' : 'password'" class="form-control border-end-0 shadow-none"
-              formControlName="password" placeholder="********" style="background-image: none;"
-              [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched">
-
-            <span class="input-group-text bg-white border-start-0" (click)="togglePasswordVisibility()"
-              style="cursor: pointer;"
-              [class.border-danger]="form.get('password')?.invalid && form.get('password')?.touched">
-              <span class="material-symbols-outlined text-muted" style="font-size: 20px; user-select: none;">
-                {{ showPassword ? 'visibility_off' : 'visibility' }}
-              </span>
-            </span>
-            <div class="invalid-feedback">Мінімум 6 символів</div>
-          </div>
+          <input type="password" class="form-control" formControlName="password" placeholder="********"
+            [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched">
+          <div class="invalid-feedback">Мінімум 6 символів</div>
         </div>
 
         <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="isLoading">
