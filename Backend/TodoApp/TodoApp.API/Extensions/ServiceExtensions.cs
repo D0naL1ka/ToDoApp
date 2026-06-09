@@ -71,7 +71,6 @@ namespace TodoApp.API.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoApp API", Version = "v1" });
 
-                // Додати JWT до Swagger
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header. Example: 'Bearer {token}'",
@@ -120,7 +119,7 @@ namespace TodoApp.API.Extensions
                 {
                     policy.WithOrigins(
                         "http://localhost:4200", // local development
-                        "https://splendorous-dango-8372dd.netlify.app" // production frontend
+                        "https://alina-todoapp.netlify.app" // production frontend
                     )
                     .AllowAnyHeader()
                     .AllowAnyMethod();

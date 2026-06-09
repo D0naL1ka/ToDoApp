@@ -48,16 +48,10 @@
                 <span *ngIf="task.dueDate && isPastDue(task.dueDate)"
                     class="small ms-auto text-danger">Прострочено</span>
             </div>
-            <div class="position-relative">
-                <input type="date" class="form-control form-control-sm border-0 bg-light shadow-none"
-                    [class.text-danger]="task.dueDate && isPastDue(task.dueDate)"
-                    [ngModel]="task.dueDate | date:'yyyy-MM-dd'"
-                    (change)="onDateChange('dueDate', $any($event.target).value)">
-                <span *ngIf="!task.dueDate" class="position-absolute text-muted small"
-                    style="top:50%; left:12px; transform:translateY(-50%); pointer-events:none;">
-                    дд.мм.рррр
-                </span>
-            </div>
+            <input type="date" class="form-control form-control-sm border-0 bg-light shadow-none"
+                [class.text-danger]="task.dueDate && isPastDue(task.dueDate)"
+                [ngModel]="task.dueDate | date:'yyyy-MM-dd'" placeholder="дд.мм.рррр"
+                (change)="onDateChange('dueDate', $any($event.target).value)">
         </div>
 
         <!-- Reminder -->
@@ -66,15 +60,9 @@
                 <span class="material-symbols-outlined" style="font-size:20px;">notifications</span>
                 <span class="small fw-medium">Нагадування</span>
             </div>
-            <div class="position-relative">
-                <input type="datetime-local" class="form-control form-control-sm border-0 bg-light shadow-none"
-                    [ngModel]="task.reminderDate | date:'yyyy-MM-ddTHH:mm'" [min]="getTodayDateTime()"
-                    (change)="onReminderChange($any($event.target).value)">
-                <span *ngIf="!task.reminderDate" class="position-absolute text-muted small"
-                    style="top:50%; left:12px; transform:translateY(-50%); pointer-events:none;">
-                    дд.мм.рррр --:--
-                </span>
-            </div>
+            <input type="datetime-local" class="form-control form-control-sm border-0 bg-light shadow-none"
+                [ngModel]="task.reminderDate | date:'yyyy-MM-ddTHH:mm'" [min]="getTodayDateTime()"
+                placeholder="дд.мм.рррр --:--" (change)="onReminderChange($any($event.target).value)">
         </div>
 
         <!-- Repeat -->

@@ -100,38 +100,41 @@
 
     <!-- Task Rows -->
     <div class="card border-0 shadow-sm rounded-2 overflow-hidden mb-3" *ngIf="!isLoading && tasks.length > 0">
-      <div *ngFor="let task of tasks" class="task-row d-flex align-items-center px-3 border-bottom"
+      <div *ngFor="let task of tasks" class="task-row d-flex align-items-start px-3 py-2 border-bottom"
         style="min-height:52px; cursor:pointer; transition:background-color .15s;"
         [class.selected-task]="selectedTask?.id === task.id" (click)="openDetail(task)">
 
-        <input type="checkbox" class="task-checkbox me-3" [checked]="task.isCompleted"
+        <input type="checkbox" class="task-checkbox me-3 mt-1 flex-shrink-0" [checked]="task.isCompleted"
           (click)="toggleComplete(task, $event)">
 
-        <span class="flex-grow-1 text-truncate pe-2" style="font-size:15px;" [class.text-muted]="task.isCompleted">
+        <span class="flex-grow-1 text-break pe-3" style="font-size:15px;" [class.text-muted]="task.isCompleted">
           {{ task.title }}
         </span>
 
-        <!-- Category dots -->
-        <div class="d-flex gap-1 me-3" *ngIf="task.categories.length">
-          <span *ngFor="let cat of task.categories" class="rounded-circle" [style.background-color]="cat.color"
-            [title]="cat.name" style="width:10px; height:10px; flex-shrink:0;"></span>
+        <div class="d-flex align-items-center flex-shrink-0 ms-auto mt-1">
+
+          <!-- Category dots -->
+          <div class="d-flex gap-1 me-3" *ngIf="task.categories.length">
+            <span *ngFor="let cat of task.categories" class="rounded-circle" [style.background-color]="cat.color"
+              [title]="cat.name" style="width:10px; height:10px; flex-shrink:0;"></span>
+          </div>
+
+          <!-- Due date -->
+          <small *ngIf="task.dueDate" class="d-flex align-items-center gap-1 me-2 text-danger text-nowrap"
+            [class.text-danger]="isPastDue(task.dueDate) && !task.isCompleted"
+            [class.text-muted]="!isPastDue(task.dueDate) || task.isCompleted">
+            <span class="material-symbols-outlined" style="font-size:14px;">event</span>
+            {{ formatDate(task.dueDate) }}
+          </small>
+
+          <!-- Star -->
+          <button class="btn p-0 d-flex align-items-center border-0 bg-transparent shadow-none"
+            (click)="toggleImportant(task, $event)">
+            <span class="material-symbols-outlined" [class.text-primary]="task.isImportant"
+              [class.icon-filled]="task.isImportant" [class.text-muted]="!task.isImportant"
+              [class.icon-outlined]="!task.isImportant" style="font-size:22px;">star</span>
+          </button>
         </div>
-
-        <!-- Due date -->
-        <small *ngIf="task.dueDate" class="d-flex align-items-center gap-1 me-2"
-          [class.text-danger]="isPastDue(task.dueDate) && !task.isCompleted"
-          [class.text-muted]="!isPastDue(task.dueDate) || task.isCompleted">
-          <span class="material-symbols-outlined" style="font-size:14px;">event</span>
-          {{ formatDate(task.dueDate) }}
-        </small>
-
-        <!-- Star -->
-        <button class="btn p-0 d-flex align-items-center border-0 bg-transparent shadow-none"
-          (click)="toggleImportant(task, $event)">
-          <span class="material-symbols-outlined" [class.text-primary]="task.isImportant"
-            [class.icon-filled]="task.isImportant" [class.text-muted]="!task.isImportant"
-            [class.icon-outlined]="!task.isImportant" style="font-size:22px;">star</span>
-        </button>
 
       </div>
     </div>
